@@ -3,7 +3,7 @@
 	"name": "Contextual Recall",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "",
+	"description": "Active form of spaced-repetition",
 	"author": "vasillieux",
 	"authorUrl": "https://github.com/vasillieux",
 	"fundingUrl": "",
