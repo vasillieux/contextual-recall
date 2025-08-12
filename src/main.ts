@@ -96,14 +96,28 @@ export default class ContextualRecallPlugin extends Plugin {
     async activateReviewView(cards?: SrsCard[]) {
         console.log(`[activateReviewView] called. Provided cards count: ${cards?.length ?? '"undefined" (will fetch due cards)'}`);
         this.app.workspace.detachLeavesOfType(REVIEW_VIEW_TYPE);
-        const leaf = this.app.workspace.getLeaf(true);
-        await leaf.setViewState({ type: 'empty' });
-        await leaf.setViewState({
-            type: REVIEW_VIEW_TYPE,
-            active: true,
-            state: { cards: cards }
-        });
+        
+        // const leaf = this.app.workspace.getLeaf(true);
+
+        let leaf: WorkspaceLeaf | undefined = this.app.workspace.getLeavesOfType(REVIEW_VIEW_TYPE)[0];
+        if (!leaf) {
+            leaf = this.app.workspace.getLeaf(true);
+            await leaf.setViewState({ type: 'empty' }); // Clear the leaf before setting the view
+        }
+
+        // Create the ReviewView instance directly and pass the cards to its constructor
+        const reviewView = new ReviewView(leaf, this, cards);
+        leaf.open(reviewView);
+
         this.app.workspace.revealLeaf(leaf);
+        
+        // console.log(`Setting view state with ${cards?.length} total cards.`)
+        // await leaf.setViewState({
+        //     type: REVIEW_VIEW_TYPE,
+        //     active: true,
+        //     state: { cards: cards }
+        // });
+        // this.app.workspace.revealLeaf(leaf);
     }
 
     trackFile(checking: boolean, file: TFile | null): boolean {

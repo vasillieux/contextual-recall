@@ -14,11 +14,15 @@ export class ReviewView extends ItemView {
     private isAnswerVisible: boolean = false;
     private boundHandleKeyPress: (event: KeyboardEvent) => void;
 
-    constructor(leaf: WorkspaceLeaf, plugin: ContextualRecallPlugin) {
+    constructor(leaf: WorkspaceLeaf, plugin: ContextualRecallPlugin, cards?: SrsCard[]) {
         super(leaf);
         this.plugin = plugin;
         this.app = plugin.app;
         this.boundHandleKeyPress = this.handleKeyPress.bind(this);
+        if (cards) {
+            this.cardsToReview = cards;
+            console.log(`[ReviewView] Initialized with ${cards.length} cards from constructor.`);
+        }
     }
 
     getViewType() { return REVIEW_VIEW_TYPE; }
@@ -26,17 +30,21 @@ export class ReviewView extends ItemView {
     getIcon() { return 'brain-circuit'; }
 
     async onOpen() {
-        const cardsFromState = this.leaf.getViewState().state?.cards;
-        if (cardsFromState) {
-            this.cardsToReview = cardsFromState as SrsCard[];
+        console.log("[ReviewView] onOpen triggered.");
+        
+        // If cards were not provided in the constructor, fetch due cards
+        if (this.cardsToReview.length === 0) {
+            console.log("[ReviewView] No cards provided in constructor. Fetching due cards.");
+            this.cardsToReview = await this.plugin.database.getDueCards();
         }
-        else this.cardsToReview = await this.plugin.database.getDueCards();
+
+        console.log(`[ReviewView] Final card count for this session: ${this.cardsToReview.length}`);
         this.currentCardIndex = 0;
         this.render();
         document.addEventListener('keydown', this.boundHandleKeyPress);
     }
 
-    onClose() {
+    async onClose() {
         document.removeEventListener('keydown', this.boundHandleKeyPress);
     }
 
