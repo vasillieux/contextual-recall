@@ -16,7 +16,7 @@ That's the most funny stuff. Basically, time's perception is very interesting st
 
 Then your journey will generated according this definition of the context. You will no see the chaotic cards, instead, you will go in the prefferable context, like you're working in the real world, solving the problem, and gathering all the pieces together.
 
-<img width="400" height="600" alt="image" src="https://github.com/user-attachments/assets/c54fdd47-16d0-4849-9104-7aa9d8ca96d7" />
+<img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/6d3552d2-4d56-4fd1-8792-d26061f6f808" />
 
 
 # How to use 
